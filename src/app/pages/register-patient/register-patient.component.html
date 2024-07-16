@@ -2,57 +2,31 @@
   <div class="box-login-form">
     <app-logo [text]="'Realize seu cadastro'"></app-logo>
     <form [formGroup]="patientForm" class="box-form" (ngSubmit)="handleFormSubmit()">
-      <div class="form-floating">
-        <input
-          name="name"
-          type="text"
-          class="form-control"
-          id="userInput"
-          placeholder="Informe o seu nome"
-          formControlName="name"
-        />
-        <label for="userInput">Nome</label>
-      </div>
-      <div class="form-floating">
-        <input
-          name="email"
-          type="text"
-          class="form-control"
-          id="emailInput"
-          placeholder="Informe o seu e-mail"
-          formControlName="email"
-          required
-        />
-        <label for="emailInput">E-mail</label>
-      </div>
-      <div class="form-floating">
-        <input
-          name="birthDate"
-          type="date"
-          class="form-control"
-          id="birthDateInput"
-          placeholder=""
-          formControlName="birthDate"
-          required
-        />
-        <label for="passwordInput">Senha</label>
-      </div>
-      <div class="form-floating">
-        <input
-          name="password"
-          type="text"
-          class="form-control"
-          id="passwordInput"
-          placeholder="Informe a sua senha"
-          formControlName="password"
-          required
-        />
-        <label for="passwordInput">Senha</label>
-      </div>
-      <button type="submit" class="w-100 btn btn-lg btn-primary button-color">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" formControlName="name" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" formControlName="email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+        <input matInput type="date" formControlName="birthDate" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="password" required>
+      </mat-form-field>
+
+      <button type="submit" color="primary" class="w-100 route-button">
         Cadastrar
       </button>
     </form>
+
     <div>
       <button class="route-button" routerLink="/login">Voltar ao login</button>
     </div>

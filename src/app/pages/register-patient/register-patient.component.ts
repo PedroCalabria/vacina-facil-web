@@ -5,11 +5,22 @@ import { Router, RouterLink } from '@angular/router';
 import { Patient } from '../../type/patient';
 import { PatientService } from '../../services/patient/patient.service';
 import { NotificationService } from '../../services/notification/notification.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-register-patient',
   standalone: true,
-  imports: [FormsModule, LogoComponent, ReactiveFormsModule, RouterLink],
+  imports: [
+    FormsModule,
+    LogoComponent,
+    ReactiveFormsModule,
+    RouterLink,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './register-patient.component.html',
   styleUrl: './register-patient.component.scss'
 })
