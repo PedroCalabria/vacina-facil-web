@@ -5,10 +5,12 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './interceptors/http.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), 
-    provideHttpClient(withInterceptors([httpInterceptor])), provideAnimationsAsync()
+    provideRouter(routes),
+    provideNativeDateAdapter(), 
+    provideHttpClient(withInterceptors([httpInterceptor])), provideAnimationsAsync(), provideAnimationsAsync()
   ]
 };
