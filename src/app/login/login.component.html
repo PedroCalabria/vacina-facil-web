@@ -4,13 +4,13 @@
     <form #login="ngForm" (ngSubmit)="submitLogin(login)" class="box-form">
       <div class="form-floating">
         <input
-        name="email"
-        type="email"
-        id="inputEmail"
-        placeholder="Informe o email"
-        required
-        [(ngModel)]="loginForm.login"
-        class="form-control"
+          name="email"
+          type="email"
+          id="inputEmail"
+          placeholder="Informe o email"
+          required
+          [(ngModel)]="loginForm.email"
+          class="form-control"
         />
         <label for="inputEmail">Email</label>
       </div>

@@ -1,26 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Login } from '../type/login';
-import { LogoComponent } from "../components/logo/logo.component";
+import { LogoComponent } from '../components/logo/logo.component';
+import { AuthService } from '../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-login',
-    standalone: true,
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
-    imports: [FormsModule, LogoComponent]
+  selector: 'app-login',
+  standalone: true,
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  imports: [FormsModule, LogoComponent],
 })
 export class LoginComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   loginForm: Login = {
-    login: '',
-    password: ''
-  }
+    email: '',
+    password: '',
+  };
 
   submitLogin(login: NgForm) {
     if (login.valid) {
-      console.log('login')
-    } else {
-      console.log('invalid')
+      this.authService.login(login.value).subscribe(() => {
+        this.router.navigate(['/appointments']);
+      });
     }
   }
 }
