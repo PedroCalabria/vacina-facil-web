@@ -1,6 +1,6 @@
 <div class="box-login">
   <div class="box-login-form">
-    <app-logo></app-logo>
+    <app-logo [text]="'Realize seu login'"></app-logo>
     <form #login="ngForm" (ngSubmit)="submitLogin(login)" class="box-form">
       <div class="form-floating">
         <input
@@ -32,8 +32,8 @@
         Entrar
       </button>
     </form>
-    <div class="register-link">
-      <a>Cadastre-se</a>
+    <div>
+      <button class="route-button" routerLink="/register">Cadastre-se</button>
     </div>
   </div>
 </div>
