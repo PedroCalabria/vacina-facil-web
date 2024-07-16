@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { loginGuard } from './guard/login.guard';
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
 import { authGuard } from './guard/auth.guard';
+import { RegisterPatientComponent } from './pages/register-patient/register-patient.component';
 
 export const routes: Routes = [
     {
@@ -19,5 +20,9 @@ export const routes: Routes = [
         path: 'login',
         component: LoginComponent,
         canActivate: [loginGuard]
+    },
+    {
+        path: 'register',
+        component: RegisterPatientComponent
     }
 ];
