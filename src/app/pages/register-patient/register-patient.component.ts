@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LogoComponent } from '../../components/logo/logo.component';
-import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { Patient } from '../../type/patient';
+import { PatientService } from '../../services/patient/patient.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-register-patient',
@@ -12,6 +14,10 @@ import { Patient } from '../../type/patient';
   styleUrl: './register-patient.component.scss'
 })
 export class RegisterPatientComponent {
+  private patientService = inject(PatientService);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+
   patientForm = new FormGroup({
     name: new FormControl(''),
     email: new FormControl(''),
@@ -21,7 +27,13 @@ export class RegisterPatientComponent {
 
   handleFormSubmit() {
     if (this.patientForm.valid) {
-      console.log('register')
+      const values = this.patientForm.value as Patient;
+      this.patientService.registerUser(values).subscribe(() => {
+        this.notificationService.showNotification(
+          `Paciente ${values.email} cadastrado com sucesso!`
+        );
+        this.router.navigate(['/login']);
+      });
     }
   }
 }

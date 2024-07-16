@@ -4,11 +4,11 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, finalize, tap } from 'rxjs';
-import { AuthService } from '../../services/auth/auth.service';
-import { NotificationService } from '../../services/notification/notification.service';
-import { ApiError } from '../../type/error';
+import { AuthService } from '../services/auth/auth.service';
+import { NotificationService } from '../services/notification/notification.service';
+import { ApiError } from '../type/error';
 
-const urlIgnore = ['/api/Authentication/login'];
+const urlIgnore = ['/api/Authentication/login', '/api/Patient/InsertPatient'];
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(AuthService);
@@ -17,6 +17,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   console.log('req', req);
   console.log('next', next);
+  console.log('Token: ', token)
 
   if (urlIgnore.includes(req.url)) {
     return next(req).pipe(
