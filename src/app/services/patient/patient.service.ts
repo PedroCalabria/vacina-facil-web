@@ -9,7 +9,7 @@ export class PatientService {
   private _http = inject(HttpClient);
 
   registerUser(values: Patient) {
-    const patient = {
+    const patient: Patient = {
       name: values.name,
       email: values.email,
       birthDate: values.birthDate,

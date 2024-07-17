@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private _http = inject(HttpClient);
@@ -19,13 +19,10 @@ export class AuthService {
   }
 
   login(loginForm: Login) {
-    console.log('login')
     return this._http
       .post<UserToken>(`/api/Authentication/login`, loginForm)
       .pipe(
         tap((token: UserToken) => {
-          console.log('pipe')
-          console.log(loginForm)
           localStorage.setItem('token', token.token);
           this.isLogged.next(true);
         })
@@ -52,12 +49,20 @@ export class AuthService {
     }
   }
 
-  decodeToken(token: string): JwtPayload{
+  decodeToken(token: string): JwtPayload {
     return jwtDecode(token) as JwtPayload;
   }
 
-  getTokenInfo(token: string): TokenDTO {
+  getTokenInfo(): TokenDTO {
+    const token = this.getToken();
+    if (token == null) {
+      throw console.error();
+    }
     const decoded_token = this.decodeToken(token);
+    const id =
+      decoded_token[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'
+      ];
     const name =
       decoded_token[
         'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
@@ -66,13 +71,15 @@ export class AuthService {
       decoded_token[
         'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
       ];
+    const birthDate = decoded_token['birthDate'];
 
     const token_info: TokenDTO = {
+      idPatient: Number(id),
       name: name,
-      email: email
+      email: email,
+      birthDate: birthDate,
     };
 
     return token_info;
   }
 }
-

@@ -1,6 +1,6 @@
 export type Appointment = {
-  name: string;
-  email: string;
-  password: string;
-  birthDate: Date;
+  idPatient: number;
+  appointmentDate: string;
+  appointmentTime: string;
+  scheduled: 1 | 2 | 3;
 };
