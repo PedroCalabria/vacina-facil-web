@@ -1,0 +1,28 @@
+.appointment-container {
+    margin-top: 64px;
+
+    .box-login{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 800px;
+        height: full;
+        flex-shrink: 0;
+        border-radius: 20px;
+        box-shadow: 1px 10px 16.5px 0px rgba(0, 0, 0, 0.15);
+        margin-top: 40px;
+        font-size: 16px;
+    
+        .changes {
+            display: flex;
+            gap: 4px;
+    
+            .changes-button {
+                border: none;
+                background-color: transparent;
+                opacity: 55%;
+            }
+        }
+    }
+}
