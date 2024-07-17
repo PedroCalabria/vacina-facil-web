@@ -1,7 +1,4 @@
-import {
-  HttpInterceptorFn,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, finalize, tap } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
@@ -17,7 +14,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   console.log('req', req);
   console.log('next', next);
-  console.log('Token: ', token)
+  console.log('Token: ', token);
 
   if (urlIgnore.includes(req.url)) {
     return next(req).pipe(
@@ -44,7 +41,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
           status: error.HttpStatus,
           message: messageError,
         };
-      }),
+      })
     );
   }
 
@@ -75,6 +72,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
         status: error.HttpStatus,
         message: messageError,
       };
-    }),
+    })
   );
 };
