@@ -10,9 +10,17 @@ import { Router, RouterLink } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatOption } from '@angular/material/core';
 import { AuthService } from '../../services/auth/auth.service';
+import { Appointment } from '../../type/appointment';
+import { NotificationService } from '../../services/notification/notification.service';
+import { AppointmentService } from '../../services/appointment/appointment.service';
+import { TokenDTO } from '../../type/login';
+import { DateTimeService } from '../../services/date-time/date-time.service';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+registerLocaleData(ptBr)
 
 @Component({
   selector: 'app-register-appointment',
@@ -27,36 +35,50 @@ import { AuthService } from '../../services/auth/auth.service';
     MatInputModule,
     MatRadioModule,
     MatOption,
-],
+    DatePipe,
+  ],
   templateUrl: './register-appointment.component.html',
   styleUrl: './register-appointment.component.scss',
 })
 export class RegisterAppointmentComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private dateTimeService = inject(DateTimeService);
+  private notificationService = inject(NotificationService);
+  private appointmentService = inject(AppointmentService);
 
+  token: TokenDTO = this.authService.getTokenInfo();
+  hours: string[] = [];
   selectedHour: string = '';
-  hours: string[] = [
-    '08:00', '09:00', '10:00', '11:00', '12:00',
-    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
-  ];
+  birthDate: string = '';
+  name: string = '';
 
   appointmentForm = new FormGroup({
-    name: new FormControl(''),
-    birthDate: new FormControl(),
     appointmentDate: new FormControl(),
     appointmentTime: new FormControl(),
   });
 
-  minDate = new Date(8, 0, 0);
-  maxDate = new Date(20, 0, 0);
+  constructor() {
+    this.birthDate = this.dateTimeService.formattedDate(this.token.birthDate);
+    this.name = this.token.name;
+    for (let i = 8; i <= 20; i++) {
+      if (i < 10) {
+        this.hours.push(`0${i}:00`);
+      } else {
+        this.hours.push(`${i}:00`);
+      }
+    }
+  }
 
   handleHourChange(event: any): void {
     const target = event.target as HTMLSelectElement;
-    this.selectedHour = target.value;
-    console.log('Selected hour:', this.selectedHour);
+    if (target.value === 'Selecione uma hora') {
+      this.selectedHour = '';
+    } else {
+      const hour = target.value.split(':')[0];
+      this.selectedHour = hour + ':00:00';
+    }
   }
-
 
   handleDifferentPatient() {
     this.authService.logout();
@@ -65,7 +87,20 @@ export class RegisterAppointmentComponent {
 
   handleFormSubmit() {
     if (this.appointmentForm.valid) {
-      console.log('Appointment registered');
+      const appointment: Appointment = {
+        idPatient: this.token.idPatient,
+        appointmentDate: this.dateTimeService.formattedDate(
+          this.appointmentForm.value.appointmentDate
+        ),
+        appointmentTime: this.selectedHour,
+        scheduled: 1,
+      };
+      this.appointmentService.registerAppointment(appointment).subscribe(() => {
+        this.notificationService.showNotification(
+          `Agendamento realizado com sucesso!`
+        );
+        this.router.navigate(['/appointments']);
+      });
     }
   }
 }

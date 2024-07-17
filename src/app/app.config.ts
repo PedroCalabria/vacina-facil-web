@@ -11,6 +11,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideNativeDateAdapter(), 
-    provideHttpClient(withInterceptors([httpInterceptor])), provideAnimationsAsync(), provideAnimationsAsync()
+    provideHttpClient(withInterceptors([httpInterceptor])), provideAnimationsAsync(), provideAnimationsAsync(),
   ]
 };
