@@ -79,6 +79,7 @@ export class RegisterAppointmentComponent {
   }
 
   handleFormSubmit() {
+    this.authService.checkIsTokenExpiring();
     if (this.appointmentForm.valid) {
       const appointment: Appointment = {
         idPatient: this.token.idPatient,

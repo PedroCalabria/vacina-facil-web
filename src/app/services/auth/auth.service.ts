@@ -83,4 +83,29 @@ export class AuthService {
 
     return token_info;
   }
+
+  checkIsTokenExpiring() {
+    const token = this.getToken();
+
+    if (!token) return;
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    const decodedToken = this.decodeToken(token);
+
+    if (!decodedToken.exp) return;
+
+    const timeRemaining = decodedToken.exp - currentTime;
+
+    if (timeRemaining > 0 && timeRemaining < 180) {
+      this.refreshToken().subscribe();
+    }
+  }
+
+  refreshToken() {
+    return this._http.get<UserToken>(`/api/Authentication/refreshToken`).pipe(
+      tap((token: UserToken) => {
+        localStorage.setItem('token', token.token);
+      })
+    );
+  }
 }

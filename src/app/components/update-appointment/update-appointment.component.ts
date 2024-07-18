@@ -100,6 +100,7 @@ export class UpdateAppointmentComponent {
   }
 
   handleFormSubmit() {
+    this.authService.checkIsTokenExpiring();
     if (this.appointmentForm.valid) {
       console.log(this.data.id);
       const date = this.appointmentForm.value.appointmentDate as string;
