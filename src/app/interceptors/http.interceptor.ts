@@ -4,17 +4,22 @@ import { catchError, finalize, tap } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { NotificationService } from '../services/notification/notification.service';
 import { ApiError } from '../type/error';
+import { LoadingService } from '../services/loading/loading.service';
 
 const urlIgnore = ['/api/Authentication/login', '/api/Patient/InsertPatient'];
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(AuthService);
   const notificationService = inject(NotificationService);
+  const loading = inject(LoadingService);
+
   const token = tokenService.getToken();
 
   console.log('req', req);
   console.log('next', next);
   console.log('Token: ', token);
+
+  loading.show();
 
   if (urlIgnore.includes(req.url)) {
     return next(req).pipe(
@@ -41,7 +46,8 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
           status: error.HttpStatus,
           message: messageError,
         };
-      })
+      }),
+      finalize(() => loading.hide())
     );
   }
 
@@ -63,15 +69,24 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       }
     }),
     catchError((error) => {
+      if (error.status === 401) {
+        tokenService.logout();
+        const messageError =  'Usuário não autenticado';
+        notificationService.showNotification(messageError);
+        throw messageError;
+      }
+
       const messageError = error?.Messages
         ? error.Messages[0]
         : 'Ocorreu um erro, tente novamente mais tarde';
 
       notificationService.showNotification(messageError);
+
       throw {
         status: error.HttpStatus,
         message: messageError,
       };
-    })
+    }),
+    finalize(() => loading.hide())
   );
 };
