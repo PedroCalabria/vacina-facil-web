@@ -20,7 +20,7 @@ import { TokenDTO } from '../../type/login';
 import { DateTimeService } from '../../services/date-time/date-time.service';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
-registerLocaleData(ptBr)
+registerLocaleData(ptBr);
 
 @Component({
   selector: 'app-register-appointment',
@@ -48,7 +48,7 @@ export class RegisterAppointmentComponent {
   private appointmentService = inject(AppointmentService);
 
   token: TokenDTO = this.authService.getTokenInfo();
-  hours: string[] = [];
+  hours: string[] = this.dateTimeService.availableHours;
   selectedHour: string = '';
   birthDate: string = '';
   name: string = '';
@@ -61,13 +61,6 @@ export class RegisterAppointmentComponent {
   constructor() {
     this.birthDate = this.dateTimeService.formattedDate(this.token.birthDate);
     this.name = this.token.name;
-    for (let i = 8; i <= 20; i++) {
-      if (i < 10) {
-        this.hours.push(`0${i}:00`);
-      } else {
-        this.hours.push(`${i}:00`);
-      }
-    }
   }
 
   handleHourChange(event: any): void {

@@ -20,9 +20,12 @@ import {
   MatDatepickerModule,
 } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { BehaviorSubject } from 'rxjs';
 import { DateTimeService } from '../../services/date-time/date-time.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { UpdateAppointmentComponent } from '../../components/update-appointment/update-appointment.component';
 
 @Component({
   selector: 'app-appointments',
@@ -40,6 +43,7 @@ import { DateTimeService } from '../../services/date-time/date-time.service';
     MatDatepickerModule,
     MatIconModule,
     FormsModule,
+    MatDialogModule,
   ],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.scss',
@@ -47,7 +51,7 @@ import { DateTimeService } from '../../services/date-time/date-time.service';
 export class AppointmentsComponent implements AfterViewInit {
   private appointmentService = inject(AppointmentService);
   private dateService = inject(DateTimeService);
-  private location = inject(Location);
+  private dialog = inject(MatDialog);
   private isDisabled = new BehaviorSubject<boolean>(true);
 
   appointments$ = this.appointmentService.appointments$;
@@ -132,7 +136,30 @@ export class AppointmentsComponent implements AfterViewInit {
 
   handleDeleteAppointment(id: number) {
     this.appointmentService.deleteAppointment(id).subscribe();
-    localStorage.removeItem('appointments')
+    localStorage.removeItem('appointments');
     this.appointmentService.getAppointmentsFromApi(null).subscribe();
+  }
+
+  handleUpdateAppointment(
+    id: number,
+    appointmentDate: string,
+    appointmentTime: string,
+    scheduled: number
+  ) {
+    console.log(
+      'id:',
+      id,
+      'appointmentDate:',
+      appointmentDate,
+      'appointmentTime:',
+      appointmentTime,
+      'scheduled:',
+      scheduled
+    );
+    const dialogRef = this.dialog.open(UpdateAppointmentComponent, {
+      width: '600px',
+      height: 'full',
+      data: { id, appointmentDate, appointmentTime, scheduled },
+    });
   }
 }

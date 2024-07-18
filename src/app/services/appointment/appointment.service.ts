@@ -1,6 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Appointment, GroupedAppointmentDTO } from '../../type/appointment';
+import {
+  Appointment,
+  GroupedAppointmentDTO,
+  UpdateAppointmentModel,
+  UpdateAppointmentModelFull,
+} from '../../type/appointment';
 import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
@@ -33,24 +38,28 @@ export class AppointmentService {
     if (date) {
       const params = new HttpParams().set('date', date.toString());
 
-      return this._http.get<GroupedAppointmentDTO[]>(
-        '/api/Appointment/GetListAppointmentsPatientsByDate',
-        { params }
-      ).pipe(
+      return this._http
+        .get<GroupedAppointmentDTO[]>(
+          '/api/Appointment/GetListAppointmentsPatientsByDate',
+          { params }
+        )
+        .pipe(
+          tap((appointments: GroupedAppointmentDTO[]) => {
+            this.appointments.next(appointments);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+          })
+        );
+    }
+    return this._http
+      .get<GroupedAppointmentDTO[]>(
+        '/api/Appointment/GetListAppointmentsPatients'
+      )
+      .pipe(
         tap((appointments: GroupedAppointmentDTO[]) => {
           this.appointments.next(appointments);
-          localStorage.setItem('appointments', JSON.stringify(appointments))
+          localStorage.setItem('appointments', JSON.stringify(appointments));
         })
       );
-    }
-    return this._http.get<GroupedAppointmentDTO[]>(
-      '/api/Appointment/GetListAppointmentsPatients'
-    ).pipe(
-      tap((appointments: GroupedAppointmentDTO[]) => {
-        this.appointments.next(appointments);
-        localStorage.setItem('appointments', JSON.stringify(appointments))
-      })
-    );
   }
 
   deleteAppointment(id: number) {
@@ -58,6 +67,19 @@ export class AppointmentService {
     return this._http.delete<GroupedAppointmentDTO[]>(
       '/api/Appointment/DeleteAppointment',
       { params }
+    );
+  }
+
+  updateAppointment(id: number, appointmentData: UpdateAppointmentModel) {
+    const appointment = {
+      idAppointment: id,
+      newAppointment: appointmentData,
+    } as UpdateAppointmentModelFull;
+    return this._http.put<GroupedAppointmentDTO[]>(
+      '/api/Appointment/UpdateAppointment',
+      {
+        ...appointment,
+      }
     );
   }
 }
