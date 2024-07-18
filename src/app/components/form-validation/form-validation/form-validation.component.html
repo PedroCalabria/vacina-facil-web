@@ -1,0 +1,5 @@
+@if(showErrors()) { @for (message of showErrorMessages(); track message) {
+<div class="error-form bg-danger text-light p-20">
+  {{ message }}
+</div>
+} }
