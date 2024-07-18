@@ -52,4 +52,12 @@ export class AppointmentService {
       })
     );
   }
+
+  deleteAppointment(id: number) {
+    const params = new HttpParams().set('idAppointment', id);
+    return this._http.delete<GroupedAppointmentDTO[]>(
+      '/api/Appointment/DeleteAppointment',
+      { params }
+    );
+  }
 }
