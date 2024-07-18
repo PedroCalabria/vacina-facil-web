@@ -1,0 +1,85 @@
+<div class="box-login">
+  <div class="box-login-form">
+    <app-logo [text]="'Atualize os dados do seu agendamento'">f</app-logo>
+    <mat-dialog-content>
+      <form
+        [formGroup]="appointmentForm"
+        class="box-form"
+        (ngSubmit)="handleFormSubmit()"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de nascimento</mat-label>
+          <input matInput type="date" formControlName="birthDate" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data do agendamento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="appointmentDatePicker"
+            formControlName="appointmentDate"
+            required
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="appointmentDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #appointmentDatePicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+        </mat-form-field>
+
+        <div class="appointment-select">
+          <select
+            id="hourSelect"
+            class="hourSelect"
+            name="hourSelect"
+            (change)="handleHourChange($event)"
+            formControlName="appointmentTime"
+            required
+          >
+            @for (hour of hours; track hour){
+            <option>{{ hour }}</option>
+            }
+          </select>
+          <select
+            id="scheduleSelect"
+            class="hourSelect"
+            name="scheduleSelect"
+            (change)="handleScheduleChange($event)"
+            formControlName="scheduled"
+            required
+          >
+            @for (option of scheduleOptions; track option){
+            <option>{{ option }}</option>
+            }
+          </select>
+        </div>
+      </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="dialog-actions">
+      <button class="action-buttons" mat-button (click)="onNoClick()">
+        Cancelar
+      </button>
+      <button
+        class="action-buttons"
+        type="submit"
+        [disabled]="appointmentForm.invalid"
+        mat-button
+        [mat-dialog-close]
+        (click)="handleFormSubmit()"
+      >
+        Atualizar
+      </button>
+    </mat-dialog-actions>
+  </div>
+</div>
