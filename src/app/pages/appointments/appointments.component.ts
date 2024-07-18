@@ -26,6 +26,7 @@ import { BehaviorSubject } from 'rxjs';
 import { DateTimeService } from '../../services/date-time/date-time.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UpdateAppointmentComponent } from '../../components/update-appointment/update-appointment.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-appointments',
@@ -52,6 +53,7 @@ export class AppointmentsComponent implements AfterViewInit {
   private appointmentService = inject(AppointmentService);
   private dateService = inject(DateTimeService);
   private dialog = inject(MatDialog);
+  private authService = inject(AuthService);
   private isDisabled = new BehaviorSubject<boolean>(true);
 
   appointments$ = this.appointmentService.appointments$;
@@ -114,6 +116,7 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   handleDateChange(event: MatDatepickerInputEvent<Date>) {
+    this.authService.checkIsTokenExpiring();
     if (event.value) {
       this.selectedDate = this.dateService.formattedDate(
         event.value.toString()
@@ -135,6 +138,7 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   handleDeleteAppointment(id: number) {
+    this.authService.checkIsTokenExpiring();
     this.appointmentService.deleteAppointment(id).subscribe();
     localStorage.removeItem('appointments');
     this.appointmentService.getAppointmentsFromApi(null).subscribe();
