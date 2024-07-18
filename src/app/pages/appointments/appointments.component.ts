@@ -39,7 +39,7 @@ import { DateTimeService } from '../../services/date-time/date-time.service';
     MatInputModule,
     MatDatepickerModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.scss',
@@ -125,11 +125,14 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   handleCancelDate() {
-    this.dateValue = null
+    this.dateValue = null;
     this.isDisabled.next(true);
-    localStorage.removeItem('appointments');
-    this.appointmentService
-        .getAppointmentsFromApi(null)
-        .subscribe();
+    this.appointmentService.getAppointmentsFromApi(null).subscribe();
+  }
+
+  handleDeleteAppointment(id: number) {
+    this.appointmentService.deleteAppointment(id).subscribe();
+    localStorage.removeItem('appointments')
+    this.appointmentService.getAppointmentsFromApi(null).subscribe();
   }
 }
