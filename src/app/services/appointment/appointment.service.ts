@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Appointment, GroupedAppointmentDTO } from '../../type/appointment';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,76 +9,8 @@ import { Appointment, GroupedAppointmentDTO } from '../../type/appointment';
 export class AppointmentService {
   private _http = inject(HttpClient);
 
-  private appointments: GroupedAppointmentDTO[] = [
-    {
-      appointmentDate: '2024-07-24T00:00:00',
-      appointmentTime: '11:00:00',
-      appointments: [
-        {
-          id: 2,
-          name: 'Pedro',
-          birthDate: '2001-09-03T00:00:00',
-          email: 'pedro@email',
-          appointmentDate: '2024-07-24T00:00:00',
-          appointmentTime: '11:00:00',
-          scheduled: 1,
-          creationDate: '2024-07-16T20:22:14.433',
-        },
-      ],
-      count: 1,
-    },
-    {
-      appointmentDate: '2024-07-25T00:00:00',
-      appointmentTime: '12:00:00',
-      appointments: [
-        {
-          id: 3,
-          name: 'Pedro',
-          birthDate: '2001-09-03T00:00:00',
-          email: 'pedro@email',
-          appointmentDate: '2024-07-25T00:00:00',
-          appointmentTime: '12:00:00',
-          scheduled: 1,
-          creationDate: '2024-07-16T22:18:47.27',
-        },
-      ],
-      count: 1,
-    },
-    {
-      appointmentDate: '2024-07-26T00:00:00',
-      appointmentTime: '11:00:00',
-      appointments: [
-        {
-          id: 4,
-          name: 'Pedro',
-          birthDate: '2001-09-03T00:00:00',
-          email: 'pedro@email',
-          appointmentDate: '2024-07-26T00:00:00',
-          appointmentTime: '11:00:00',
-          scheduled: 1,
-          creationDate: '2024-07-16T22:19:29.783',
-        },
-      ],
-      count: 1,
-    },
-    {
-      appointmentDate: '2024-07-27T00:00:00',
-      appointmentTime: '12:00:00',
-      appointments: [
-        {
-          id: 1,
-          name: 'Pedro',
-          birthDate: '2001-09-03T00:00:00',
-          email: 'pedro@email',
-          appointmentDate: '2024-07-27T00:00:00',
-          appointmentTime: '12:00:00',
-          scheduled: 1,
-          creationDate: '2024-07-16T18:52:28.247',
-        },
-      ],
-      count: 1,
-    },
-  ];
+  private appointments = new BehaviorSubject<GroupedAppointmentDTO[]>([]);
+  appointments$ = this.appointments.asObservable();
 
   registerAppointment(values: Appointment) {
     const appointment: Appointment = {
@@ -92,7 +25,31 @@ export class AppointmentService {
     );
   }
 
-  getAppointments() {
-    return this.appointments;
+  setAppointments(appointments: GroupedAppointmentDTO[]) {
+    this.appointments.next(appointments);
+  }
+
+  getAppointmentsFromApi(date: string | null) {
+    if (date) {
+      const params = new HttpParams().set('date', date.toString());
+
+      return this._http.get<GroupedAppointmentDTO[]>(
+        '/api/Appointment/GetListAppointmentsPatientsByDate',
+        { params }
+      ).pipe(
+        tap((appointments: GroupedAppointmentDTO[]) => {
+          this.appointments.next(appointments);
+          localStorage.setItem('appointments', JSON.stringify(appointments))
+        })
+      );
+    }
+    return this._http.get<GroupedAppointmentDTO[]>(
+      '/api/Appointment/GetListAppointmentsPatients'
+    ).pipe(
+      tap((appointments: GroupedAppointmentDTO[]) => {
+        this.appointments.next(appointments);
+        localStorage.setItem('appointments', JSON.stringify(appointments))
+      })
+    );
   }
 }

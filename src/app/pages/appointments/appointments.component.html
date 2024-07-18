@@ -1,6 +1,29 @@
 <div class="appointment-container">
   <app-logo [text]="'Agendamentos'"></app-logo>
   <div class="box-login">
+    <div class="date">
+      <button
+        class="cancel-date"
+        [ngClass]="{ invisible: (isDisabled$ | async) }"
+        [disabled]="isDisabled$ | async"
+        (click)="handleCancelDate()"
+      >
+        <img src="../../../assets/close.png" />
+      </button>
+      <mat-form-field appearance="outline" class="mat-date">
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          (dateChange)="handleDateChange($event)"
+          [(ngModel)]="dateValue"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
     <table mat-table matSort [dataSource]="dataSource" class="aptable">
       <ng-container matColumnDef="name">
         <th mat-header-cell mat-sort-header *matHeaderCellDef>Nome</th>

@@ -4,6 +4,7 @@ import { Login } from '../type/login';
 import { LogoComponent } from '../components/logo/logo.component';
 import { AuthService } from '../services/auth/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { AppointmentService } from '../services/appointment/appointment.service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ import { Router, RouterLink } from '@angular/router';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private appointmentService = inject(AppointmentService);
 
   loginForm: Login = {
     email: '',
@@ -28,6 +30,7 @@ export class LoginComponent {
   submitLogin(login: NgForm) {
     if (login.valid) {
       this.authService.login(login.value).subscribe(() => {
+        this.appointmentService.getAppointmentsFromApi(null).subscribe();
         this.router.navigate(['/appointments']);
       });
     }
