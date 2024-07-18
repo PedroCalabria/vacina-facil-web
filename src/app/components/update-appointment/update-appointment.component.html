@@ -17,6 +17,10 @@
           <input matInput type="date" formControlName="birthDate" />
         </mat-form-field>
 
+        <app-form-validation
+          [control]="appointmentForm.controls.appointmentDate"
+        ></app-form-validation>
+
         <mat-form-field appearance="outline">
           <mat-label>Data do agendamento</mat-label>
           <input

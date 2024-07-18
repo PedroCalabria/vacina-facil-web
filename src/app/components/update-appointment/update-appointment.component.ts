@@ -1,6 +1,11 @@
 import { Component, Inject, inject } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   MatFormFieldControl,
   MatFormFieldModule,
@@ -22,6 +27,7 @@ import { TokenDTO } from '../../type/login';
 import { UpdateAppointmentModel } from '../../type/appointment';
 import { AppointmentService } from '../../services/appointment/appointment.service';
 import { Router } from '@angular/router';
+import { FormValidationComponent } from '../form-validation/form-validation/form-validation.component';
 
 @Component({
   selector: 'app-update-appointment',
@@ -37,6 +43,7 @@ import { Router } from '@angular/router';
     MatDialogContent,
     MatNativeDateModule,
     MatInputModule,
+    FormValidationComponent,
   ],
   templateUrl: './update-appointment.component.html',
   styleUrl: './update-appointment.component.scss',
@@ -69,7 +76,10 @@ export class UpdateAppointmentComponent {
   appointmentForm = new FormGroup({
     name: new FormControl({ value: this.name, disabled: true }),
     birthDate: new FormControl({ value: this.birthDate, disabled: true }),
-    appointmentDate: new FormControl(this.data.appointmentDate),
+    appointmentDate: new FormControl(this.data.appointmentDate, [
+      Validators.required,
+      this.dateTimeService.validateAppointmentDate(),
+    ]),
     appointmentTime: new FormControl(this.selectedHour),
     scheduled: new FormControl(1),
   });
@@ -102,7 +112,6 @@ export class UpdateAppointmentComponent {
   handleFormSubmit() {
     this.authService.checkIsTokenExpiring();
     if (this.appointmentForm.valid) {
-      console.log(this.data.id);
       const date = this.appointmentForm.value.appointmentDate as string;
       const appointment: UpdateAppointmentModel = {
         appointmentDate: this.dateTimeService.formattedDate(date),

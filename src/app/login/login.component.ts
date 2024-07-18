@@ -5,6 +5,7 @@ import { LogoComponent } from '../components/logo/logo.component';
 import { AuthService } from '../services/auth/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { AppointmentService } from '../services/appointment/appointment.service';
+import { FormValidationComponent } from "../components/form-validation/form-validation/form-validation.component";
 
 @Component({
   selector: 'app-login',
@@ -14,8 +15,9 @@ import { AppointmentService } from '../services/appointment/appointment.service'
   imports: [
     FormsModule,
     LogoComponent,
-    RouterLink
-  ],
+    RouterLink,
+    FormValidationComponent
+],
 })
 export class LoginComponent {
   private authService = inject(AuthService);
