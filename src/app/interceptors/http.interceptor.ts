@@ -15,10 +15,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = tokenService.getToken();
 
-  console.log('req', req);
-  console.log('next', next);
-  console.log('Token: ', token);
-
   loading.show();
 
   if (urlIgnore.includes(req.url)) {
