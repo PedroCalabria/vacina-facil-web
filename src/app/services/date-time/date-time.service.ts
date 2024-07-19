@@ -34,7 +34,7 @@ export class DateTimeService {
       if (
         !birthDate ||
         isNaN(Date.parse(birthDate)) ||
-        new Date(birthDate).getDate() >= currentDate.getDate()
+        new Date(birthDate).getDate() >= (currentDate.getDate() -1)
       ) {
         return { invalidDate: true };
       }
