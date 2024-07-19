@@ -6,7 +6,7 @@ import {
   UpdateAppointmentModel,
   UpdateAppointmentModelFull,
 } from '../../type/appointment';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class AppointmentService {
     );
   }
 
-  registerAppointment(values: Appointment) {
+  registerAppointment(values: Appointment): Observable<Appointment[]> {
     const appointment: Appointment = {
       idPatient: values.idPatient,
       appointmentDate: values.appointmentDate,
@@ -39,11 +39,11 @@ export class AppointmentService {
     );
   }
 
-  setAppointments(appointments: GroupedAppointmentDTO[]) {
+  setAppointments(appointments: GroupedAppointmentDTO[]): void {
     this.appointments.next(appointments);
   }
 
-  getAppointmentsFromApi(date: string | null) {
+  getAppointmentsFromApi(date: string | null): Observable<GroupedAppointmentDTO[]> {
     if (date) {
       const params = new HttpParams().set('date', date.toString());
 
@@ -65,13 +65,14 @@ export class AppointmentService {
       )
       .pipe(
         tap((appointments: GroupedAppointmentDTO[]) => {
+          console.log('asdadadasds')
           this.appointments.next(appointments);
           localStorage.setItem('appointments', JSON.stringify(appointments));
         })
       );
   }
 
-  deleteAppointment(id: number) {
+  deleteAppointment(id: number): Observable<GroupedAppointmentDTO[]> {
     const params = new HttpParams().set('idAppointment', id);
     return this._http.delete<GroupedAppointmentDTO[]>(
       '/api/Appointment/DeleteAppointment',
@@ -79,7 +80,7 @@ export class AppointmentService {
     );
   }
 
-  updateAppointment(id: number, appointmentData: UpdateAppointmentModel) {
+  updateAppointment(id: number, appointmentData: UpdateAppointmentModel): Observable<GroupedAppointmentDTO[]> {
     const appointment = {
       idAppointment: id,
       newAppointment: appointmentData,

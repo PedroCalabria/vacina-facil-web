@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth/auth.service';
 export class ButtonLogoutComponent {
   private authService = inject(AuthService);
 
-  logout() {
+  logout(): void {
     this.authService.logout();
   }
 }

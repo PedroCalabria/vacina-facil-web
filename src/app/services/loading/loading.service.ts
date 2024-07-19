@@ -9,14 +9,14 @@ export class LoadingService {
   loading$ = this.loading.asObservable();
   private totalRequest = 0;
 
-  show() {
+  show(): void {
     this.totalRequest++;
     if (this.totalRequest === 1) {
       this.loading.next(true);
     }
   }
 
-  hide() {
+  hide(): void {
     this.totalRequest--;
     this.loading.next(false);
   }

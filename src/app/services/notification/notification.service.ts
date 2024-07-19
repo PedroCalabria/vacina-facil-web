@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'
 export class NotificationService {
   private snackBar = inject(MatSnackBar);
 
-  showNotification(message: string) {
+  showNotification(message: string): void {
     this.snackBar.open(message, 'Fechar', {
       duration: 30000,
       horizontalPosition: 'center',
@@ -15,7 +15,7 @@ export class NotificationService {
     });
   }
 
-  hideNotification() {
+  hideNotification(): void {
     this.snackBar.dismiss();
   }
 }

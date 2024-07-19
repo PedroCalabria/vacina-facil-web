@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -8,7 +8,9 @@ import {
 } from '@angular/forms';
 import { LogoComponent } from '../../components/logo/logo.component';
 import { Router, RouterLink } from '@angular/router';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -19,10 +21,9 @@ import { NotificationService } from '../../services/notification/notification.se
 import { AppointmentService } from '../../services/appointment/appointment.service';
 import { TokenDTO } from '../../type/login';
 import { DateTimeService } from '../../services/date-time/date-time.service';
-import { DatePipe, registerLocaleData } from '@angular/common';
-import ptBr from '@angular/common/locales/pt';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
 import { FormValidationComponent } from '../../components/form-validation/form-validation/form-validation.component';
-registerLocaleData(ptBr);
 
 @Component({
   selector: 'app-register-appointment',
@@ -42,6 +43,7 @@ registerLocaleData(ptBr);
   ],
   templateUrl: './register-appointment.component.html',
   styleUrl: './register-appointment.component.scss',
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
 })
 export class RegisterAppointmentComponent {
   private router = inject(Router);
@@ -49,6 +51,9 @@ export class RegisterAppointmentComponent {
   private dateTimeService = inject(DateTimeService);
   private notificationService = inject(NotificationService);
   private appointmentService = inject(AppointmentService);
+  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
+
+  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
 
   token: TokenDTO = this.authService.getTokenInfo();
   hours: string[] = this.dateTimeService.availableHours;
@@ -57,7 +62,7 @@ export class RegisterAppointmentComponent {
   name: string = '';
 
   appointmentForm = new FormGroup({
-    appointmentDate: new FormControl<string |  null>(null, [
+    appointmentDate: new FormControl<string | null>(null, [
       Validators.required,
       this.dateTimeService.validateAppointmentDate(),
     ]),
@@ -67,6 +72,7 @@ export class RegisterAppointmentComponent {
   constructor() {
     this.birthDate = this.dateTimeService.formattedDate(this.token.birthDate);
     this.name = this.token.name;
+    this._adapter.setLocale(this._locale());
   }
 
   handleHourChange(event: Event): void {
@@ -75,20 +81,18 @@ export class RegisterAppointmentComponent {
     this.selectedHour = hour + ':00';
   }
 
-  handleDifferentPatient() {
+  handleDifferentPatient(): void {
     this.authService.logout();
     this.router.navigate(['/register']);
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(): void {
     this.authService.checkIsTokenExpiring();
     if (this.appointmentForm.valid) {
       const date = this.appointmentForm.value.appointmentDate as string;
       const appointment: Appointment = {
         idPatient: this.token.idPatient,
-        appointmentDate: this.dateTimeService.formattedDate(
-          date
-        ),
+        appointmentDate: this.dateTimeService.formattedDate(date),
         appointmentTime: this.selectedHour,
         scheduled: 1,
       };

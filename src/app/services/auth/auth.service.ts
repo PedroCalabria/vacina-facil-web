@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { JwtPayload, Login, TokenDTO, UserToken } from '../../type/login';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class AuthService {
     this.checkToken();
   }
 
-  login(loginForm: Login) {
+  login(loginForm: Login): Observable<UserToken> {
     return this._http
       .post<UserToken>(`/api/Authentication/login`, loginForm)
       .pipe(
@@ -29,18 +29,18 @@ export class AuthService {
       );
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('appointments');
     this.isLogged.next(false);
     this.router.navigate(['/login']);
   }
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  checkToken() {
+  checkToken(): void {
     const token = this.getToken();
 
     if (token) {
@@ -84,7 +84,7 @@ export class AuthService {
     return token_info;
   }
 
-  checkIsTokenExpiring() {
+  checkIsTokenExpiring(): void {
     const token = this.getToken();
 
     if (!token) return;
@@ -101,7 +101,7 @@ export class AuthService {
     }
   }
 
-  refreshToken() {
+  refreshToken():Observable<UserToken> {
     return this._http.get<UserToken>(`/api/Authentication/refreshToken`).pipe(
       tap((token: UserToken) => {
         localStorage.setItem('token', token.token);
