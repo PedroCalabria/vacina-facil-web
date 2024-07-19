@@ -1,0 +1,7 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <img src="/assets/logout.png" alt="Icone de logout">
+  </button>
+  <mat-menu #menu="matMenu">
+    <app-button-logout></app-button-logout>
+    <app-delete-patient></app-delete-patient>
+  </mat-menu>

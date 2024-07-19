@@ -1,0 +1,50 @@
+<div class="box-login">
+  <div class="box-login-form">
+    <app-logo [text]="'Realize seu cadastro'"></app-logo>
+    <form [formGroup]="patientForm" class="box-form" (ngSubmit)="handleFormSubmit()">
+      
+      <app-form-validation
+        [control]="patientForm.controls.name"
+      ></app-form-validation>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" formControlName="name" required>
+      </mat-form-field>
+
+      <app-form-validation
+        [control]="patientForm.controls.email"
+      ></app-form-validation>
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" formControlName="email" required>
+      </mat-form-field>
+
+      <app-form-validation
+        [control]="patientForm.controls.birthDate"
+      ></app-form-validation>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+        <input matInput type="date" formControlName="birthDate" required>
+      </mat-form-field>
+
+      <app-form-validation
+        [control]="patientForm.controls.password"
+      ></app-form-validation>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="password" required>
+      </mat-form-field>
+
+      <button type="submit" color="primary" class="register-button">
+        Cadastrar
+      </button>
+    </form>
+    <div>
+      <button class="route-button" routerLink="/login">Voltar ao login</button>
+    </div>
+  </div>
+</div>

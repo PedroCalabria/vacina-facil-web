@@ -1,0 +1,33 @@
+.box-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 440px;
+    height: full;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 1px 10px 16.5px 0px rgba(0, 0, 0, 0.15);
+    margin-top: 40px;
+
+    .box-login-form {
+        width: 400px;
+        padding: 20px;
+    }
+
+    .route-button{
+        margin-top: 12px;
+        margin-left: 4px;
+        border: 0;
+        background-color: transparent;
+    }
+}
+  
+.box-form {
+    margin-top: 30px;
+
+    .form-floating{
+        margin: 10px 0;
+    }
+}
+  

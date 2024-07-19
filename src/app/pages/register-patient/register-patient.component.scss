@@ -1,0 +1,60 @@
+.box-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 440px;
+    height: full;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 1px 10px 16.5px 0px rgba(0, 0, 0, 0.15);
+    margin-top: 40px;
+
+    .box-login-form {
+        width: 400px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .box-form {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            mat-form-field {
+                width: 260px;
+            }
+        
+            .form-floating{
+                margin: 10px 0;
+            }
+
+            .register-button {
+                background-color: #0d6efd;
+                color: white;
+                width: 260px;
+                height: 48px;
+                border-radius: 8px;
+                border: 0;
+            }
+
+            app-form-validation{
+                width: 260px;
+            }
+        }
+    }
+
+    .route-button{
+        margin-top: 48px;
+        background-color: transparent;
+        border: 0;
+    }
+}
+
+button{
+    font-size: 20px;
+}

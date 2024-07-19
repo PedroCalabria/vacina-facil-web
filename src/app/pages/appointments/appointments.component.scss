@@ -1,0 +1,56 @@
+.appointment-container {
+    margin-top: 64px;
+
+    .box-login{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        height: full;
+        flex-shrink: 0;
+        border-radius: 20px;
+        box-shadow: 1px 10px 16.5px 0px rgba(0, 0, 0, 0.15);
+        margin-top: 40px;
+        font-size: 16px;
+
+        .date {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            width: 100%;
+            margin-right: 24px;
+            margin-top: 16px;
+            
+
+            .cancel-date {
+                height: 28px;
+                border: none;
+                background-color: transparent;
+                vertical-align: middle;
+                margin-bottom: 22px;
+                margin-right: 4px;
+                opacity: 90%;
+            }
+
+            .mat-date {
+                width: 180px;
+            }
+        }
+    
+        .changes {
+            display: flex;
+            gap: 4px;
+    
+            .changes-button {
+                border: none;
+                background-color: transparent;
+                opacity: 55%;
+            }
+        }
+    }
+}
+
+.invisible {
+    display: none;
+}

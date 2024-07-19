@@ -1,0 +1,16 @@
+<div>
+  <h2 mat-dialog-title>Deletar</h2>
+  <mat-dialog-content> Tem certeza que deseja deletar? </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close (click)="onNoClick()" class="cancel">Cancelar</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      (click)="handleSubmit()"
+      class="delete"
+    >
+      Deletar
+    </button>
+  </mat-dialog-actions>
+</div>

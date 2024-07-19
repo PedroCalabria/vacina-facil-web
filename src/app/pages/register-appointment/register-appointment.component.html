@@ -1,0 +1,69 @@
+<div class="box-login">
+  <div class="box-login-form">
+    <app-logo [text]="'Realize seu agendamento'"></app-logo>
+    <form
+      [formGroup]="appointmentForm"
+      class="box-form"
+      (ngSubmit)="handleFormSubmit()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" value="{{ name }}" disabled />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+        <input matInput type="date" value="{{ birthDate }}" disabled />
+      </mat-form-field>
+
+      <app-form-validation
+        [control]="appointmentForm.controls.appointmentDate"
+      ></app-form-validation>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data do agendamento</mat-label>
+        <input
+          matInput
+          [matDatepicker]="appointmentDatePicker"
+          formControlName="appointmentDate"
+          required
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="appointmentDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #appointmentDatePicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+      <div>
+        <select
+          id="hourSelect"
+          class="hourSelect"
+          name="hourSelect"
+          (change)="handleHourChange($event)"
+          formControlName="appointmentTime"
+        >
+          @for (hour of hours; track hour){
+          <option>{{ hour }}</option>
+          }
+        </select>
+      </div>
+
+      <button type="submit" class="submit-button">Cadastrar</button>
+    </form>
+
+    <div class="return-field">
+      <button class="route-button" routerLink="/login">
+        Voltar aos agendamentos
+      </button>
+      <button class="route-button" (click)="handleDifferentPatient()">
+        Cadastrar outro paciente
+      </button>
+    </div>
+  </div>
+</div>
