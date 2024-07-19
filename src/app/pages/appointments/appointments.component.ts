@@ -3,14 +3,13 @@ import {
   Component,
   inject,
   ViewChild,
-  NgModule,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AppointmentDTO, GroupedAppointmentDTO } from '../../type/appointment';
-import { CommonModule, DatePipe, Location } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { LogoComponent } from '../../components/logo/logo.component';
-import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { AppointmentService } from '../../services/appointment/appointment.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,10 +23,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { BehaviorSubject } from 'rxjs';
 import { DateTimeService } from '../../services/date-time/date-time.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { UpdateAppointmentComponent } from '../../components/update-appointment/update-appointment.component';
 import { AuthService } from '../../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { DeleteAppointmentComponent } from '../../components/delete-appointment/delete-appointment.component';
 
 @Component({
   selector: 'app-appointments',
@@ -55,7 +53,6 @@ export class AppointmentsComponent implements AfterViewInit {
   private dateService = inject(DateTimeService);
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
-  private router = inject(Router);
   private isDisabled = new BehaviorSubject<boolean>(true);
 
   appointments$ = this.appointmentService.appointments$;
@@ -140,10 +137,10 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   handleDeleteAppointment(id: number) {
-    this.authService.checkIsTokenExpiring();
-    this.appointmentService.deleteAppointment(id).subscribe(() => {
-      this.appointmentService.getAppointmentsFromApi(null).subscribe(() => {
-      });
+    this.dialog.open(DeleteAppointmentComponent, {
+      width: '600px',
+      height: 'full',
+      data: { id },
     });
   }
 

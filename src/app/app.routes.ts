@@ -28,6 +28,11 @@ export const routes: Routes = [
     },
     {
         path: 'schedule',
-        component: RegisterAppointmentComponent
+        component: RegisterAppointmentComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: '**',
+        redirectTo: '/'
     }    
 ];
