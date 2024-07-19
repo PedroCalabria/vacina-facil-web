@@ -8,7 +8,7 @@
         [disabled]="isDisabled$ | async"
         (click)="handleCancelDate()"
       >
-        <img src="../../../assets/close.png" />
+        <img src="/assets/close.png" />
       </button>
       <mat-form-field appearance="outline" class="mat-date">
         <mat-label>Choose a date</mat-label>
@@ -101,7 +101,7 @@
     </table>
 
     <mat-paginator
-      [pageSizeOptions]="[2, 5, 10, 20]"
+      [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
       aria-label="Select page of periodic elements"
       class="paginator"
