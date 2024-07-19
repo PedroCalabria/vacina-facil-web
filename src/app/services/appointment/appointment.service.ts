@@ -47,7 +47,7 @@ export class AppointmentService {
 
       return this._http
         .get<GroupedAppointmentDTO[]>(
-          '/api/Appointment/GetListAppointmentsPatientsByDate',
+          '/api/AppointmentPatient/GetListAppointmentsPatientsByDate',
           { params }
         )
         .pipe(
@@ -59,7 +59,7 @@ export class AppointmentService {
     }
     return this._http
       .get<GroupedAppointmentDTO[]>(
-        '/api/Appointment/GetListAppointmentsPatients'
+        '/api/AppointmentPatient/GetListAppointmentsPatients'
       )
       .pipe(
         tap((appointments: GroupedAppointmentDTO[]) => {

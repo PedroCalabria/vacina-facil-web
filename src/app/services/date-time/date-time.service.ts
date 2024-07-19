@@ -31,10 +31,16 @@ export class DateTimeService {
       const birthDate = control.value;
       const currentDate = new Date();
 
+      const birthDateWithoutTime = new Date(birthDate);
+      birthDateWithoutTime.setHours(0, 0, 0, 0);
+
+      const currentDateWithoutTime = new Date(currentDate);
+      currentDateWithoutTime.setHours(0, 0, 0, 0);
+
       if (
         !birthDate ||
         isNaN(Date.parse(birthDate)) ||
-        new Date(birthDate).getDate() >= (currentDate.getDate() -1)
+        birthDateWithoutTime >= currentDateWithoutTime
       ) {
         return { invalidDate: true };
       }
@@ -48,10 +54,16 @@ export class DateTimeService {
       const appointmentDate = control.value;
       const currentDate = new Date();
 
+      const appointmentDateWithoutTime = new Date(appointmentDate);
+      appointmentDateWithoutTime.setHours(0, 0, 0, 0);
+
+      const currentDateWithoutTime = new Date(currentDate);
+      currentDateWithoutTime.setHours(0, 0, 0, 0);
+
       if (
         !appointmentDate ||
         isNaN(Date.parse(appointmentDate)) ||
-        new Date(appointmentDate).getDate() < currentDate.getDate()
+        appointmentDateWithoutTime < currentDateWithoutTime
       ) {
         return { invalidDate: true };
       }
