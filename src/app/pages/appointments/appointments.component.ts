@@ -27,6 +27,7 @@ import { DateTimeService } from '../../services/date-time/date-time.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UpdateAppointmentComponent } from '../../components/update-appointment/update-appointment.component';
 import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-appointments',
@@ -54,6 +55,7 @@ export class AppointmentsComponent implements AfterViewInit {
   private dateService = inject(DateTimeService);
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
+  private router = inject(Router);
   private isDisabled = new BehaviorSubject<boolean>(true);
 
   appointments$ = this.appointmentService.appointments$;
@@ -139,9 +141,10 @@ export class AppointmentsComponent implements AfterViewInit {
 
   handleDeleteAppointment(id: number) {
     this.authService.checkIsTokenExpiring();
-    this.appointmentService.deleteAppointment(id).subscribe();
-    localStorage.removeItem('appointments');
-    this.appointmentService.getAppointmentsFromApi(null).subscribe();
+    this.appointmentService.deleteAppointment(id).subscribe(() => {
+      this.appointmentService.getAppointmentsFromApi(null).subscribe(() => {
+      });
+    });
   }
 
   handleUpdateAppointment(

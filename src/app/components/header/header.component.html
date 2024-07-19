@@ -1,7 +1,13 @@
 <div>
   <header>
-    <a routerLink="/appointments">Agendamentos</a>
-    <a routerLink="/schedule">Agendar</a>
+    <a matBadge="{{ totalCount$ | async }}" matBadgeSize="medium" routerLink="/appointments"
+      >Agendamentos
+      <img src="/assets/appointment.png" />
+    </a>
+    <a routerLink="/schedule"
+      >Agendar
+      <img src="/assets/planning.png" />
+    </a>
     <app-button-logout></app-button-logout>
   </header>
 </div>

@@ -49,7 +49,6 @@ export class DateTimeService {
         isNaN(Date.parse(appointmentDate)) ||
         new Date(appointmentDate).getTime() < currentDate.getTime()
       ) {
-        console.log('DATE ERROR')
         return { invalidDate: true };
       }
 

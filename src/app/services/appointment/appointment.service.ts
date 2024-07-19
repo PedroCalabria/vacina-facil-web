@@ -6,7 +6,7 @@ import {
   UpdateAppointmentModel,
   UpdateAppointmentModelFull,
 } from '../../type/appointment';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,15 @@ export class AppointmentService {
 
   private appointments = new BehaviorSubject<GroupedAppointmentDTO[]>([]);
   appointments$ = this.appointments.asObservable();
+
+  private numberAppointments = new BehaviorSubject<number>(0);
+  numberAppointments$ = this.numberAppointments.asObservable();
+
+  constructor() {
+    this.numberAppointments$ = this.appointments$.pipe(
+      map(appointments => appointments.reduce((sum, appointment) => sum + appointment.count, 0))
+    );
+  }
 
   registerAppointment(values: Appointment) {
     const appointment: Appointment = {

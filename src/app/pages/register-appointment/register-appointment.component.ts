@@ -52,7 +52,7 @@ export class RegisterAppointmentComponent {
 
   token: TokenDTO = this.authService.getTokenInfo();
   hours: string[] = this.dateTimeService.availableHours;
-  selectedHour: string = '08:00';
+  selectedHour: string = '08:00:00';
   birthDate: string = '';
   name: string = '';
 
@@ -98,6 +98,7 @@ export class RegisterAppointmentComponent {
         );
         this.router.navigate(['/appointments']);
       });
+      localStorage.removeItem('appointments');
     }
   }
 }
