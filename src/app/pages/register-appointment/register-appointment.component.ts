@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatOption } from '@angular/material/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { Appointment } from '../../type/appointment';
+import { Appointment, GroupedAppointmentDTO } from '../../type/appointment';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AppointmentService } from '../../services/appointment/appointment.service';
 import { TokenDTO } from '../../type/login';
@@ -73,6 +73,13 @@ export class RegisterAppointmentComponent {
     this.birthDate = this.dateTimeService.formattedDate(this.token.birthDate);
     this.name = this.token.name;
     this._adapter.setLocale(this._locale());
+    const savedAppointments = localStorage.getItem('appointments');
+    if (savedAppointments) {
+      const appointments = JSON.parse(
+        savedAppointments
+      ) as GroupedAppointmentDTO[];
+      this.appointmentService.setAppointments(appointments);
+    }
   }
 
   handleHourChange(event: Event): void {

@@ -21,9 +21,7 @@ export class AppointmentService {
   numberAppointments$ = this.numberAppointments.asObservable();
 
   constructor() {
-    this.numberAppointments$ = this.appointments$.pipe(
-      map(appointments => appointments.reduce((sum, appointment) => sum + appointment.count, 0))
-    );
+    this.setNumberAppointments();
   }
 
   registerAppointment(values: Appointment): Observable<Appointment[]> {
@@ -65,7 +63,6 @@ export class AppointmentService {
       )
       .pipe(
         tap((appointments: GroupedAppointmentDTO[]) => {
-          console.log('asdadadasds')
           this.appointments.next(appointments);
           localStorage.setItem('appointments', JSON.stringify(appointments));
         })
@@ -91,5 +88,15 @@ export class AppointmentService {
         ...appointment,
       }
     );
+  }
+
+  setNumberAppointments(): void {
+    this.numberAppointments$ = this.appointments$.pipe(
+      map(appointments => appointments.reduce((sum, appointment) => sum + appointment.count, 0)),
+      tap(count => {
+        localStorage.setItem('numberAppointments', count.toString());
+        this.numberAppointments.next(count);
+      })
+    )
   }
 }
