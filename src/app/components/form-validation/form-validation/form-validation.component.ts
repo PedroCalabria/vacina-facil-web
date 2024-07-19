@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { ErrorMessages } from '../../../type/error';
 
 @Component({
@@ -29,11 +29,11 @@ export class FormValidationComponent {
     return [];
   }
 
-  messages(errorKey: string, errorValue: any) {
+  messages(errorKey: string, errorValue: ValidationErrors) {
     const messages: ErrorMessages = {
       required: 'O campo é obrigatório',
-      minlength: `O campo precisa ter no minimo ${errorValue.requiredLength} caracteres`,
-      maxlength: `O campo precisa ter no maximo ${errorValue.requiredLength} caracteres`,
+      minlength: `O campo precisa ter no minimo ${errorValue['requiredLength']} caracteres`,
+      maxlength: `O campo precisa ter no maximo ${errorValue['requiredLength']} caracteres`,
       email: `O email é inválido`,
       invalidDate: 'A data informada está inválida',
     };

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Patient } from '../../type/patient';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Patient } from '../../type/patient';
 export class PatientService {
   private _http = inject(HttpClient);
 
-  registerUser(values: Patient) {
+  registerUser(values: Patient): Observable<Patient[]> {
     const patient: Patient = {
       name: values.name,
       email: values.email,

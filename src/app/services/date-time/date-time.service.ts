@@ -6,17 +6,21 @@ import moment from 'moment';
   providedIn: 'root',
 })
 export class DateTimeService {
-  public availableHours: string[] = [];
-
-  constructor() {
-    for (let i = 8; i <= 20; i++) {
-      if (i < 10) {
-        this.availableHours.push(`0${i}:00`);
-      } else {
-        this.availableHours.push(`${i}:00`);
-      }
-    }
-  }
+  public availableHours: string[] = [
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+  ];
 
   formattedDate(date: string): string {
     return moment(date).locale('pt-br').format('YYYY-MM-DD');
@@ -30,7 +34,7 @@ export class DateTimeService {
       if (
         !birthDate ||
         isNaN(Date.parse(birthDate)) ||
-        new Date(birthDate).getTime() >= currentDate.getTime()
+        new Date(birthDate).getDate() >= currentDate.getDate()
       ) {
         return { invalidDate: true };
       }
@@ -47,7 +51,7 @@ export class DateTimeService {
       if (
         !appointmentDate ||
         isNaN(Date.parse(appointmentDate)) ||
-        new Date(appointmentDate).getTime() < currentDate.getTime()
+        new Date(appointmentDate).getDate() < currentDate.getDate()
       ) {
         return { invalidDate: true };
       }

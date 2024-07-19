@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit, signal } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import {
   FormControl,
@@ -19,7 +19,7 @@ import {
   MatDialogContent,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { DateTimeService } from '../../services/date-time/date-time.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -47,12 +47,16 @@ import { FormValidationComponent } from '../form-validation/form-validation/form
   ],
   templateUrl: './update-appointment.component.html',
   styleUrl: './update-appointment.component.scss',
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
 })
-export class UpdateAppointmentComponent {
+export class UpdateAppointmentComponent implements OnInit{
   private dateTimeService = inject(DateTimeService);
   private authService = inject(AuthService);
   private appointmentService = inject(AppointmentService);
   private router = inject(Router);
+  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
+
+  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
 
   token: TokenDTO = this.authService.getTokenInfo();
   hours: string[] = this.dateTimeService.availableHours;
@@ -72,6 +76,10 @@ export class UpdateAppointmentComponent {
     },
     private dialogRef: MatDialogRef<UpdateAppointmentComponent>
   ) {}
+
+  ngOnInit(): void {
+    this._adapter.setLocale(this._locale());
+  }
 
   appointmentForm = new FormGroup({
     name: new FormControl({ value: this.name, disabled: true }),
@@ -121,7 +129,7 @@ export class UpdateAppointmentComponent {
       this.appointmentService
         .updateAppointment(this.data.id, appointment)
         .subscribe(() => {
-          this.router.navigate(['/appointments']);
+          this.appointmentService.getAppointmentsFromApi(null).subscribe();
         });
     }
   }

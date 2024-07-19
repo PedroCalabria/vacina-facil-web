@@ -153,17 +153,7 @@ export class AppointmentsComponent implements AfterViewInit {
     appointmentTime: string,
     scheduled: number
   ) {
-    console.log(
-      'id:',
-      id,
-      'appointmentDate:',
-      appointmentDate,
-      'appointmentTime:',
-      appointmentTime,
-      'scheduled:',
-      scheduled
-    );
-    const dialogRef = this.dialog.open(UpdateAppointmentComponent, {
+    this.dialog.open(UpdateAppointmentComponent, {
       width: '600px',
       height: 'full',
       data: { id, appointmentDate, appointmentTime, scheduled },
