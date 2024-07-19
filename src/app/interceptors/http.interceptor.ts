@@ -32,16 +32,18 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }),
       catchError((error) => {
+        if (error.HttpStatus === 500){
+          const messageError =  'Email e/ou senha inválido';
+          notificationService.showNotification(messageError);
+          throw messageError;
+        }
+
         const messageError = error?.Messages
           ? error.Messages[0]
           : 'Ocorreu um erro, tente novamente mais tarde';
 
         notificationService.showNotification(messageError);
 
-        if (error.status === 401) {
-          tokenService.logout();
-          throw 'Usuário não autenticado';
-        }
         throw {
           status: error.HttpStatus,
           message: messageError,

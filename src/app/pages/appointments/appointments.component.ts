@@ -104,7 +104,7 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   translateScheduledEnum(scheduled: string) {
-    switch (scheduled) {
+    switch (scheduled.toString()) {
       case '2':
         return 'Realizado';
       case '3':

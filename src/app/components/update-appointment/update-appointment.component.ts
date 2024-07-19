@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  MatFormFieldControl,
   MatFormFieldModule,
 } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -26,7 +25,6 @@ import { AuthService } from '../../services/auth/auth.service';
 import { TokenDTO } from '../../type/login';
 import { UpdateAppointmentModel } from '../../type/appointment';
 import { AppointmentService } from '../../services/appointment/appointment.service';
-import { Router } from '@angular/router';
 import { FormValidationComponent } from '../form-validation/form-validation/form-validation.component';
 
 @Component({
@@ -53,7 +51,6 @@ export class UpdateAppointmentComponent implements OnInit{
   private dateTimeService = inject(DateTimeService);
   private authService = inject(AuthService);
   private appointmentService = inject(AppointmentService);
-  private router = inject(Router);
   private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
 
   private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
