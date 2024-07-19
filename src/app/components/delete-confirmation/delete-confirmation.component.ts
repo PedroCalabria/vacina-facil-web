@@ -9,13 +9,13 @@ import { AuthService } from '../../services/auth/auth.service';
 import { AppointmentService } from '../../services/appointment/appointment.service';
 
 @Component({
-  selector: 'app-delete-appointment',
+  selector: 'app-delete-confirmation',
   standalone: true,
   imports: [MatDialogContent, MatDialogActions],
-  templateUrl: './delete-appointment.component.html',
-  styleUrl: './delete-appointment.component.scss',
+  templateUrl: './delete-confirmation.component.html',
+  styleUrl: './delete-confirmation.component.scss',
 })
-export class DeleteAppointmentComponent {
+export class DeleteConfirmationComponent {
   private authService = inject(AuthService);
   private appointmentService = inject(AppointmentService);
 
@@ -24,7 +24,7 @@ export class DeleteAppointmentComponent {
     public data: {
       id: number;
     },
-    private dialogRef: MatDialogRef<DeleteAppointmentComponent>
+    private dialogRef: MatDialogRef<DeleteConfirmationComponent>
   ) {}
 
   onNoClick(): void {
@@ -32,10 +32,6 @@ export class DeleteAppointmentComponent {
   }
 
   handleSubmit(): void {
-    this.authService.checkIsTokenExpiring();
-    this.appointmentService.deleteAppointment(this.data.id).subscribe(() => {
-      this.appointmentService.getAppointmentsFromApi(null).subscribe(() => {});
-    });
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 }

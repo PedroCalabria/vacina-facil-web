@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  inject,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AppointmentDTO, GroupedAppointmentDTO } from '../../type/appointment';
@@ -25,7 +20,8 @@ import { BehaviorSubject } from 'rxjs';
 import { DateTimeService } from '../../services/date-time/date-time.service';
 import { UpdateAppointmentComponent } from '../../components/update-appointment/update-appointment.component';
 import { AuthService } from '../../services/auth/auth.service';
-import { DeleteAppointmentComponent } from '../../components/delete-appointment/delete-appointment.component';
+import { ExitOptionsComponent } from '../../components/exit-options/exit-options.component';
+import { DeleteConfirmationComponent } from '../../components/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-appointments',
@@ -44,6 +40,7 @@ import { DeleteAppointmentComponent } from '../../components/delete-appointment/
     MatIconModule,
     FormsModule,
     MatDialogModule,
+    ExitOptionsComponent,
   ],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.scss',
@@ -137,10 +134,23 @@ export class AppointmentsComponent implements AfterViewInit {
   }
 
   handleDeleteAppointment(id: number) {
-    this.dialog.open(DeleteAppointmentComponent, {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
       width: '600px',
       height: 'full',
       data: { id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.authService.checkIsTokenExpiring();
+        this.appointmentService
+          .deleteAppointment(id)
+          .subscribe(() => {
+            this.appointmentService
+              .getAppointmentsFromApi(null)
+              .subscribe(() => {});
+          });
+      }
     });
   }
 
